@@ -10,25 +10,32 @@
     <div class="container d-flex align-items-center h-100" ng-controller="AppCtrl">
       <div class="row no-gutters justify-content-center w-100">
         {{> header}}
-        
+
         <div class="card text-center w-100">
           <div class="card-header">
             <form name="inputForm">
               <div class="form-group row">
                 <div class="col-8">
-                  <input type="text" class="form-control form-control-lg" placeholder="Required, max length 50" maxlength="50" ng-model="url" ng-keyup="$event.keyCode == 13 ? makeRequest($event) : null" /> 
+                  <input type="text" class="form-control form-control-lg" placeholder="Required, max length 50" maxlength="50" ng-model="url" ng-keyup="$event.keyCode == 13 ? makeRequest($event) : null" />
                 </div>
                 <div class="col-4">
                   <input type="number" class="form-control form-control-lg" min="0" max="10000" step=".01" ng-model="number"  />
                 </div>
-              </div>          
+              </div>
             </form>
           </div>
-          
-          <ul class="list-group list-group-flush"></ul>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action justify-content-between" ng-repeat="item in list">
+              <span class="float-left">\{{item.timestamp}}
+                <span class="badge" ng-class="{'badge-success': item.statusCode >= 200 && item.statusCode < 300, 'badge-danger': item.statusCode >= 300 || item.statusCode == -1}">\{{item.statusCode}}</span>
+              </span>
+              \{{item.responseText}}
+            </li>
+          </ul>
         </div>
         {{> footer}}
-      </div>  
+      </div>
     </div>
   </body>
 

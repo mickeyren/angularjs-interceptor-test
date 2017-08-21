@@ -17,27 +17,28 @@ angular.module('app', []).config(['$locationProvider', '$httpProvider', function
 /**
 * our http interceptor
 */
-angular.module('app').factory('httpInterceptor', ['$rootScope', '$q', function httpInterceptor($rootScope, $q, $location) {
+angular.module('app').factory('httpInterceptor', ['$rootScope', '$q', 'messages', function httpInterceptor($rootScope, $q, messages) {
     return {
       // intercept every request
       request: function(config) {
-        appendToList('', config.url)
+        messages.add('', config.url)
+
         config.headers = config.headers || {};
         return config;
       },
       // intercept response
       response: function(response) {
-        appendToList(response.status, response.data)
+        messages.add(response.status, response.data)
         salert(
           response.statusText,
           'your request has been fulfilled',
           'success'
-        )      
+        )
         return $q.reject(response);
       },
       // catch errors
       responseError: function(response) {
-        appendToList(response.status, response.data)
+        messages.add(response.status, response.data || response.xhrStatus)
         salert(
           response.statusText,
           'there has been an error making the request',
@@ -56,12 +57,30 @@ angular.module('app').run(['$rootScope', '$location', function run($rootScope, $
   }]
 )
 
+/**
+* service class that will store the data between the interceptor and the controller
+*/
+angular.module('app').service('messages', function() {
+  var messages = {}
+  messages.list = []
+
+  messages.add = function(statusCode, responseText) {
+    if(typeof(responseText) == Object) {
+      responseText = JSON.stringify(responseText)
+    }
+    messages.list.unshift({timestamp: (+ new Date()), statusCode: statusCode, responseText: responseText})
+  }
+
+  return messages
+})
+
 /* controller */
-angular.module('app').controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
+angular.module('app').controller('AppCtrl', ['$scope', '$http', 'messages', function($scope, $http, messages) {
     $scope.url = ''
     $scope.number = 0
+    $scope.list = messages.list
 
-    $scope.makeRequest = function($event) {   
+    $scope.makeRequest = function($event) {
       $event.currentTarget.blur()
 
       if($scope.inputForm.$invalid) {
@@ -87,15 +106,4 @@ function salert(title, text = null,  type = null) {
   }, () => {
     angular.element(document.getElementsByClassName('swal2-container')).remove()
   })
-}
-
-function appendToList(statusCode, responseText) {
-  let list = angular.element(document.getElementsByClassName('list-group'))
-  list.prepend(
-    `<li class="list-group-item list-group-item-action justify-content-between">
-      <span class="float-left"> ${+ new Date()}
-      <span class="badge badge-info">${statusCode}</span>
-      </span>
-      ${JSON.stringify(responseText)}
-    </li>`)  
 }
