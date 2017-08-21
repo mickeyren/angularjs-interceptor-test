@@ -21,26 +21,13 @@ angular.module('app').factory('httpInterceptor', ['$rootScope', '$q', function h
     return {
       // intercept every request
       request: function(config) {
-        let list = angular.element(document.getElementsByClassName('list-group'))
-        list.prepend(
-          `<li class="list-group-item list-group-item-action justify-content-between">
-            <span class="float-left"> ${+ new Date()}</span>
-            ${config.url}
-            <span class="badge badge-info float-right"></span>
-          </li>`)
+        appendToList('', config.url)
         config.headers = config.headers || {};
         return config;
       },
       // intercept response
       response: function(response) {
-        let list = angular.element(document.getElementsByClassName('list-group'))
-        list.prepend(
-          `<li class="list-group-item list-group-item-action justify-content-between">
-            <span class="float-left"> ${+ new Date()}
-            <span class="badge badge-success">${response.status}</span>
-            </span>
-            ${JSON.stringify(response.data)}
-          </li>`)
+        appendToList(response.status, response.data)
         salert(
           response.statusText,
           'your request has been fulfilled',
@@ -50,14 +37,7 @@ angular.module('app').factory('httpInterceptor', ['$rootScope', '$q', function h
       },
       // catch errors
       responseError: function(response) {
-        let list = angular.element(document.getElementsByClassName('list-group'))
-        list.prepend(
-          `<li class="list-group-item list-group-item-action justify-content-between">
-            <span class="float-left"> ${+ new Date()}
-            <span class="badge badge-success">${response.status}</span>
-            </span>
-            ${JSON.stringify(response.data)}
-          </li>`)
+        appendToList(response.status, response.data)
         salert(
           response.statusText,
           'there has been an error making the request',
@@ -107,4 +87,15 @@ function salert(title, text = null,  type = null) {
   }, () => {
     angular.element(document.getElementsByClassName('swal2-container')).remove()
   })
+}
+
+function appendToList(statusCode, responseText) {
+  let list = angular.element(document.getElementsByClassName('list-group'))
+  list.prepend(
+    `<li class="list-group-item list-group-item-action justify-content-between">
+      <span class="float-left"> ${+ new Date()}
+      <span class="badge badge-info">${statusCode}</span>
+      </span>
+      ${JSON.stringify(responseText)}
+    </li>`)  
 }
