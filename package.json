@@ -1,0 +1,60 @@
+{
+  "name": "David_Ang",
+  "version": "0.1.0",
+  "description": "A starter project to work with vanilla ES6 using Babel and Webpack",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:paulochavesbr/paulo_chaves.git"
+  },
+  "author": "David Ang <davidang09@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --colors",
+    "build": "npm run clean && NODE_ENV=production webpack",
+    "lint": "eslint src config",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.1.2",
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "compression-webpack-plugin": "^0.4.0",
+    "css-loader": "^0.28.0",
+    "eslint": "^4.2.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "handlebars": "^3.0.3",
+    "handlebars-loader": "^1.5.0",
+    "html-webpack-plugin": "^2.29.0",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^2.0.6",
+    "preload-webpack-plugin": "^1.2.2",
+    "rimraf": "^2.6.1",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.8",
+    "webpack": "^3.2.0",
+    "webpack-dev-server": "^2.5.1"
+  },
+  "dependencies": {
+    "angular": "^1.6.6",
+    "bootstrap": "4.0.0-beta",
+    "ng-annotate": "^1.2.2",
+    "normalize.css": "^7.0.0",
+    "sweetalert2": "^6.6.9"
+  }
+}
